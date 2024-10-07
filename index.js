@@ -16,7 +16,7 @@ mongoose.connect(connectionString).then(()=>{
     console.log("Connection failed.");
 });
 
-
+//Testing 1
 
 app.use("/api/users", userRouter);
 app.use("api/gallery", galleryItemRouter);
