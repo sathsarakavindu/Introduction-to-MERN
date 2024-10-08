@@ -33,5 +33,10 @@ export function getGalleryItems(req, res){
 }
 
 export function deleteGalleryItems(req, res){
+  const id = req.body;
   
+}
+
+export function putGalleryItems(req, res){
+  const id = req.body;
 }
