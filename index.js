@@ -18,9 +18,11 @@ mongoose.connect(connectionString).then(()=>{
 
 //Testing 1
 
+const portNumber = 3000;
+
 app.use("/api/users", userRouter);
 app.use("api/gallery", galleryItemRouter);
 
-app.listen(3000, (req, res) => {
-    console.log('App listening on port 3000!');
+app.listen(portNumber, (req, res) => {
+    console.log(`App listening on port ${portNumber}!`);
 });
