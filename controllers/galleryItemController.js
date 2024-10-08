@@ -35,3 +35,7 @@ export function getGalleryItems(req, res){
 export function deleteGalleryItems(req, res){
   
 }
+
+export function putGalleryItems(req, res){
+  
+}
