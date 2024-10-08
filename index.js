@@ -3,7 +3,7 @@ import express from 'express';
 import body_parser from 'body-parser'
 import userRouter from './routes/UserRoute.js';
 import mongoose from 'mongoose';
-import galleryItemRouter from './routes/galleryItem.js';
+import galleryItemRouter from './routes/galleryItemRouter.js';
 const app = express();
 
 app.use(body_parser.json());
@@ -18,9 +18,11 @@ mongoose.connect(connectionString).then(()=>{
 
 //Testing 1
 
-app.use("/api/users", userRouter);
-app.use("api/gallery", galleryItemRouter);
+const portNumber = 5000;
 
-app.listen(3000, (req, res) => {
-    console.log('App listening on port 3000!');
+app.use("/api/users", userRouter);
+app.use("/api/gallery", galleryItemRouter);
+
+app.listen(portNumber, (req, res) => {
+    console.log(`App listening on port ${portNumber}!`);
 });
