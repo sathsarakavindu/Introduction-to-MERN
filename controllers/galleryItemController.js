@@ -5,8 +5,17 @@
 import GalleryItems from "../Models/galleryItem.js";
 
 export function createGalleryItem(req, res){
-    const galleryItem = req.body;
-    console.log(galleryItem);
+const user = req.user;
+    if(user == null){
+       res.status(403).json({message: "Please login to create a gallery item."});
+       return;
+      }
+    if(user?.type != "admin"){
+         res.status(403).json({message: "You don't have permission to create a gallery item"});
+         return;
+        }
+    const galleryItem = req.body.item;
+    
 
     const newGalleryItem = new GalleryItems(galleryItem);
     newGalleryItem.save().then(()=>{
@@ -30,13 +39,4 @@ export function getGalleryItems(req, res){
         errorMsg: "Can't be found that your data"
       })
     })
-}
-
-export function deleteGalleryItems(req, res){
-  const id = req.body;
-  
-}
-
-export function putGalleryItems(req, res){
-  const id = req.body;
 }
