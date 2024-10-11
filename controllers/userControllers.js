@@ -9,7 +9,8 @@ export function postUsers(req, res){
     console.log(user);
 
     const password = req.body.password;
-    const passwordHash = bcrypt.hashSync(password, 10);
+    const saltRounds = 10;
+    const passwordHash = bcrypt.hashSync(password, saltRounds);
     user.password = passwordHash;
     const newUser = new User(user);
     newUser.save().then(()=>{
