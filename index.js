@@ -4,6 +4,7 @@ import body_parser from 'body-parser'
 import userRouter from './routes/UserRoute.js';
 import mongoose from 'mongoose';
 import galleryItemRouter from './routes/galleryItemRouter.js';
+import categoryRouter from './routes/categoryRoute.js';
 import jwt from 'jsonwebtoken';
 const app = express();
 
@@ -18,8 +19,9 @@ app.use((req, res, next)=>{
        if(token != null){
            jwt.verify(token,"secret",(err, decoded)=>{
                  if(decoded != null){
-                    req.user = decoded
-                   
+                    
+                    req.user = decoded;
+                    
                     next()
                  }else{
                     console.log(err)
@@ -29,6 +31,7 @@ app.use((req, res, next)=>{
            });
     
        }else{
+        console.log("Token is null");
         next()
        }
 });
@@ -46,6 +49,7 @@ const portNumber = 5000;
 
 app.use("/api/users", userRouter);
 app.use("/api/gallery", galleryItemRouter);
+app.use("/api/category", categoryRouter);
 
 app.listen(portNumber, (req, res) => {
     console.log(`App listening on port ${portNumber}!`);
