@@ -19,7 +19,7 @@ const connectionString = process.env.MONGO_URL;
 
 app.use((req, res, next)=>{
        const token = req.header("Authorization")?.replace("Bearer ", "");
- const secret_key = process.env.secret_key;
+ const secret_key = process.env.SECRET_KEY;
        if(token != null){
            jwt.verify(token,secret_key,(err, decoded)=>{
                  if(decoded != null){
