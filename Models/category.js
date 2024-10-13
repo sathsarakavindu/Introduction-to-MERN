@@ -14,6 +14,14 @@ const categoryData = mongoose.Schema({
     price:{
         type: Number,
         require: true
+    },
+    features:[
+        {
+            type: String,
+        }
+    ],
+    image: {
+        type: String
     }
 });
 
