@@ -86,6 +86,9 @@ export function getRoomByCategory(req, res){
             if(result != null){
               res.status(200).json({rooms: result});
             }
+            else{
+              res.status(403).json({message: "Not available"});
+            }
    }).catch(()=>{
     res.status(200).json({error: "Can't be found"});
    });
