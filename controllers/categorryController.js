@@ -1,5 +1,6 @@
 
 import category from "../Models/category.js";
+import { isAdminValid } from "./userControllers.js";
 
 export function createCategory(req, res){
      const user = req.user;
@@ -114,3 +115,26 @@ export function getCategoryByPrice(req, res){
       });
    });
 }
+
+export function updateCategory(req, res){
+
+
+  if(!isAdminValid(req)){
+  res.status(403).json({
+   msg: "Unauthorized"
+  });
+  return;
+  }
+  const name = req.params.name;
+
+  category.updateOne({category_name: name}, req.body).then((updateList)=>{
+  res.json({
+    message: "Category updated successfully.",
+    list: updateList
+  });
+  }).catch(()=>{
+   res.json({error: "Failed to update"});
+  });
+
+}
+

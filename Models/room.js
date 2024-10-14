@@ -6,34 +6,43 @@ const RoomModel = mongoose.Schema({
     required: true,
     unique: true
    },
-   room_name:{
-    type: String,
-    required: true
-   },
+   // room_name:{
+   //  type: String,
+   //  required: true
+   // },
    room_category:{
     type: String,
     required: true
    },
    booking_status:{
     type: Boolean,
-    required: true
+    required: true,
+    default: false
    },
    num_of_guests:{
     type: Number,
-    required: true
+    required: true,
+    default: 3
+   },
+   available: {
+   type: Boolean,
+   required: true,
+   default: true
    },
    photos: [
     {
      type: String,
-     required: true 
+
     }
    ],
-   description: {
-    type: String
+   specialDescription: {
+    type: String,
+    default: ""
    },
    is_special:{
     type: Boolean,
     default: false,
+    required: true
    }
 });
 
