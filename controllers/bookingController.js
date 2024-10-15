@@ -120,3 +120,32 @@ export function approveBookingStatus(req, res){
     res.status(404).json({msg: "You haven't access to approve booking."});
   }
 }
+
+export function cancelBooking(req, res){
+
+   if(isAdminValid(req)){
+    const bookID = req.params.book_id;
+    Booking.findOneAndUpdate({bookingId: bookID}, {status: req.body.status}).then((result)=>{
+      if(result != null){
+        res.status(200).json({
+          message: "Successfully updated.",
+          result: result
+        });
+      }
+      else{
+        res.status(404).json({
+          message: "Not available booking."
+        });
+      }
+    }).catch((e)=>{
+      res.status(500).json({
+        message: "Can't be found the booking."
+      });
+    });
+   }else{
+    res.status(500).json({
+      message: "You haven't access to cancelling booking."
+    });
+   }
+
+}
