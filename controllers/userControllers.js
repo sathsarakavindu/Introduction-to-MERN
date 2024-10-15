@@ -2,6 +2,7 @@ import User from "../Models/user.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 import dotenv from 'dotenv';
+import Room from "../Models/room.js";
 
 dotenv.config();
 
@@ -126,3 +127,4 @@ function isAccountDisable(user){
           return true;
         }
 }
+
