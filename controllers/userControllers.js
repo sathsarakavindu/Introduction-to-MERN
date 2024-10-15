@@ -44,7 +44,12 @@ export function loginUser(req, res){
 
             res.status(403).json({
               message: "Incorrect password."
-            })
+            });
+            return;
+       }
+       if(isAccountDisable(user)){
+           res.status(500).json({Restricted: "Your account has been banned"});
+           return;
        }
        else{
         const payload = {
@@ -94,4 +99,30 @@ export function isCustomerValid(req, res){
   }
   return true;
 
+}
+
+export function userDisable(req, res){
+        if(isAdminValid(req)){
+          User.findOneAndUpdate({email: req.body.email}, {disabled: true}).then((result)=>{
+            res.status(200).json({
+              message: "User account successfully disabled!", 
+              result: result});
+          }).catch((err)=>{
+            res.status(500).json({
+              message: "User account can't be disabled!", 
+              error: err});
+          });
+        }else{
+          
+          return;
+        }
+}
+
+function isAccountDisable(user){
+        if(user.disabled == false){
+          return false;
+        }
+        else{
+          return true;
+        }
 }
