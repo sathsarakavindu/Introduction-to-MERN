@@ -11,21 +11,45 @@ export function addRoom(req, res){
     }
     else{
       const roomData = req.body;
-      const addRooms = new Room(roomData);
-      addRooms.save().then((list)=>{
 
-        if(list != null){
-            res.status(201).json({
-              status: "Room sucessfully created.!",
-              details: list
-            });
+      Room.findOne({room_id:req.body.room_id}).then((result)=>{
+        if(result != null){
+          res.status(400).json({msg: "This romm has already been added."});
+          return;
+        }
+        else{
+          
+
+
+          const addRooms = new Room(roomData);
+          addRooms.save().then((list)=>{
+    
+            if(list != null){
+                res.status(201).json({
+                  status: "Room sucessfully created.!",
+                  details: list
+                });
+            }
+            else{
+              res.status(404).json({
+                status: "This romm has already been added."
+              });
+              return;
+            }
+    
+          }).catch(()=>{
+            res.status(404).json({
+                status: "Room can't be created.!"
+              });
+          });
         }
 
-      }).catch(()=>{
-        res.status(404).json({
-            status: "Room can't be created.!"
-          });
-      });
+      }).catch((err)=>{
+        res.status(400).json({msg: "Can't be found the room", error: err});
+        return;
+      })
+      
+   
     }
 
 }
@@ -93,6 +117,32 @@ export function getRoomByCategory(req, res){
     res.status(200).json({error: "Can't be found"});
    });
 
+}
+
+export function maintainRoom(req, res){
+ 
+  if(isAdminValid(req)){
+        Room.findOneAndUpdate({room_id: req.body.roomId}, {available: false}).then((list)=>{
+          if(list != null){
+            res.status(200).json({
+              message: "The room sucessfully disabled for maintain.", 
+              result: list
+            });
+          }
+          else{
+            res.status(404).json({
+              msg: "No rooms are available."});
+          }
+         
+        }).catch((err)=>{
+          res.status(500).json({
+            message: "The room can't be found", error: err});
+        });
+  }
+  else{
+    res.status(500).json({
+      message: "You haven't access"});
+  }
 }
 
 // export function editRoomsById(req, res){
