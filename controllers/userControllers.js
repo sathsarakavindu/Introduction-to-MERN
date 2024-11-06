@@ -85,6 +85,7 @@ export function isAdminValid(req){
       return false;
   }
   if(req.user.type != "admin"){
+    
     return false;
   }
   return true;
@@ -117,6 +118,22 @@ export function userDisable(req, res){
           
           return;
         }
+}
+
+export function getUser(req, res){
+  const user = req.body.user;
+
+  if(user == null){
+    res.json({
+      message: "Not found"
+    });
+  }
+  else{
+    res.json({
+      message: "User found",
+      user: user
+    })
+  }
 }
 
 function isAccountDisable(user){
