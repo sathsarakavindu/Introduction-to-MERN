@@ -163,7 +163,8 @@ export default function getAllBookings(req, res){
   }).catch((err)=>{
     res.json(
       {
-        message: "Failed to get all booking", error: err
+        message: "Failed to get all booking", 
+        error: err
       }
     )
   })
