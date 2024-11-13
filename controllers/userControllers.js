@@ -81,10 +81,12 @@ export function loginUser(req, res){
 }
 
 export function isAdminValid(req){
-  if(req.user == null){
+  if(req.body.user == null){
+    console.log("Request user is " + req.body.user);
       return false;
   }
-  if(req.user.type != "admin"){
+  if(req.body.user.type != "admin"){
+    
     return false;
   }
   return true;
@@ -92,12 +94,15 @@ export function isAdminValid(req){
 
 export function isCustomerValid(req, res){
 
-  if(req.user == null){
+  if(req.body.user == null){
+   
     return false;
   }
-  if(req.user.type != "customer"){
+  if(req.body.user.type != "customer"){
+   
        return false;
   }
+  
   return true;
 
 }
@@ -119,7 +124,23 @@ export function userDisable(req, res){
         }
 }
 
-function isAccountDisable(user){
+export function getUser(req, res){
+  const user = req.body.user;
+
+  if(user == null){
+    res.json({
+      message: "Not found"
+    });
+  }
+  else{
+    res.json({
+      message: "User found",
+      user: user
+    })
+  }
+}
+
+export function isAccountDisable(user){
         if(user.disabled == false){
           return false;
         }

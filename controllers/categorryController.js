@@ -3,7 +3,7 @@ import category from "../Models/category.js";
 import { isAdminValid } from "./userControllers.js";
 
 export function createCategory(req, res){
-     const user = req.user;
+     const user = req.body.user;
        if(user == null){
         res.status(403).json({
             message: "Please login to create categories."
@@ -18,7 +18,9 @@ export function createCategory(req, res){
           return;
        }
 
-       const categories = req.body.categories;
+       const categories = req.body;
+
+       console.log(categories);
 
        const adding = new category(categories);
        adding.save().then((result)=>{
@@ -57,7 +59,7 @@ export function deleteCategory(req, res){
 
    const name = req.params.name;
 
-   //const item = req.body.name;
+
 
    if(name != null){
       category.findOne({category_name: name}).then((result)=>{
