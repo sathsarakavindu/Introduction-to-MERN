@@ -183,7 +183,7 @@ export function getOnlyCustomers(req, res){
     .catch((err)=>{console.log(err)});
   }
   else{
-    console.log("You have no access to manage users.")
+    console.log("You have no access to manage users.");
   }
    
 }
