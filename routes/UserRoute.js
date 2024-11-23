@@ -10,5 +10,4 @@ userRouter.put("/accountdisable", userDisable);
 userRouter.put("/accountenable", userEnable);
 userRouter.get("/", getUser);
 userRouter.get("/all-users", getOnlyCustomers);
-
 export default userRouter;
