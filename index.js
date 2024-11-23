@@ -9,10 +9,13 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import roomRouter from './routes/roomRoute.js';
 import bookingRouter from './routes/bookingRoute.js';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 app.use(body_parser.json())
 
@@ -21,13 +24,14 @@ const connectionString = process.env.MONGO_URL;
 
 app.use((req, res, next)=>{
        const token = req.header("Authorization")?.replace("Bearer ", "");
+       console.log(token);
  const secret_key = process.env.SECRET_KEY;
        if(token != null){
            jwt.verify(token,secret_key,(err, decoded)=>{
                  if(decoded != null){
                     
-                    req.user = decoded;
-                    
+                    req.body.user = decoded;
+                   
                     next()
                  }else{
                     console.log(err)

@@ -18,9 +18,6 @@ export function addRoom(req, res){
           return;
         }
         else{
-          
-
-
           const addRooms = new Room(roomData);
           addRooms.save().then((list)=>{
     
@@ -106,7 +103,7 @@ export function getRoomByCategory(req, res){
 
    const cat_ = req.params.category;
 
-   Room.findOne({room_category: cat_}).then((result)=>{
+   Room.find({room_category: cat_}).then((result)=>{
             if(result != null){
               res.status(200).json({rooms: result});
             }

@@ -81,10 +81,12 @@ export function loginUser(req, res){
 }
 
 export function isAdminValid(req){
-  if(req.user == null){
+  if(req.body.user == null){
+    console.log("Request user is " + req.body.user);
       return false;
   }
-  if(req.user.type != "admin"){
+  if(req.body.user.type != "admin"){
+    
     return false;
   }
   return true;
@@ -92,12 +94,15 @@ export function isAdminValid(req){
 
 export function isCustomerValid(req, res){
 
-  if(req.user == null){
+  if(req.body.user == null){
+   
     return false;
   }
-  if(req.user.type != "customer"){
+  if(req.body.user.type != "customer"){
+   
        return false;
   }
+  
   return true;
 
 }
@@ -119,7 +124,42 @@ export function userDisable(req, res){
         }
 }
 
-function isAccountDisable(user){
+export function userEnable(req, res){
+  if(isAdminValid(req)){
+    User.findOneAndUpdate({email: req.body.email}, {disabled: false}).then((result)=>{
+      res.status(200).json({
+        message: "User account successfully enabled!", 
+        result: result});
+    }).catch((err)=>{
+      res.status(500).json({
+        message: "User account can't be enabled!", 
+        error: err});
+    });
+  }else{
+    
+    return;
+  }
+}
+
+
+
+export function getUser(req, res){
+  const user = req.body.user;
+
+  if(user == null){
+    res.json({
+      message: "Not found"
+    });
+  }
+  else{
+    res.json({
+      message: "User found",
+      user: user
+    })
+  }
+}
+
+export function isAccountDisable(user){
         if(user.disabled == false){
           return false;
         }
@@ -128,3 +168,20 @@ function isAccountDisable(user){
         }
 }
 
+export function getOnlyCustomers(req, res){
+  if(isAdminValid(req)){
+    console.log("Admin");
+    User.find({type: 'customer'}).
+    then((result)=>{
+      res.status(200).json({
+        message: "Found users", 
+        result: result
+      });
+    })
+    .catch((err)=>{console.log(err)});
+  }
+  else{
+    console.log("You have no access to manage users.");
+  }
+   
+}
