@@ -170,7 +170,6 @@ export function isAccountDisable(user){
 
 export function getOnlyCustomers(req, res){
   if(isAdminValid(req)){
-
     console.log("Admin");
     User.find({type: 'customer'}).
     then((result)=>{
