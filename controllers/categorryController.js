@@ -55,6 +55,33 @@ export function viewCategory(req, res){
 
 }
 
+
+
+export function viewAllCategory(req, res) {
+    category.find({}, { category_name: 1, _id: 0 }) // Project only 'category_name' field
+        .then((categories) => {
+            if (categories && categories.length > 0) {
+                const categoryNames = categories.map(cat => cat.category_name); // Extract category_name values
+                console.log("Category Names:", categoryNames); // Print to console
+                res.status(200).json({
+                    categories: categoryNames
+                });
+            } else {
+                res.status(404).json({
+                    message: "No categories found"
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching categories:", error);
+            res.status(500).json({
+                message: "An error occurred while fetching categories."
+            });
+        });
+}
+
+
+
 export function deleteCategory(req, res){
 
    const name = req.params.name;

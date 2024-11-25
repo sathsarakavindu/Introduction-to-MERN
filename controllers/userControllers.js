@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 import dotenv from 'dotenv';
 import Room from "../Models/room.js";
+import nodemailer from 'nodemailer';
+import Otp from "../Models/otp.js";
+
 
 dotenv.config();
 
@@ -17,7 +20,23 @@ export function postUsers(req, res){
     user.password = passwordHash;
     const newUser = new User(user);
     newUser.save().then(()=>{
-        res.json({message: "User created successfully!"})
+         const otp = Math.floor(1000 + Math.random() * 9000);
+
+         const newOtp = new Otp({
+          email: user.email,
+          otp: otp
+         });
+
+         newOtp.save().then(async ()=>{
+         await sendOtpEmail(user.email, otp);
+             res.json({
+              message: "User created successfully"
+            });
+         })
+
+        res.json({
+          message: "User created successfully!"
+        })
     }).catch((error)=>{
       console.log(error)
        res.json({message:"User creation failed."});
@@ -48,10 +67,10 @@ export function loginUser(req, res){
             });
             return;
        }
-       if(isAccountDisable(user)){
-           res.status(500).json({Restricted: "Your account has been banned"});
-           return;
-       }
+      //  if(isAccountDisable(user)){
+      //      res.status(500).json({Restricted: "Your account has been banned"});
+      //      return;
+      //  }
        else{
         const payload = {
           id: user._id,
@@ -70,14 +89,9 @@ export function loginUser(req, res){
           user: user,
           token: token
         });
-
        }
-      
-       
-       }
+      }
   });
-
-
 }
 
 export function isAdminValid(req){
@@ -95,11 +109,11 @@ export function isAdminValid(req){
 export function isCustomerValid(req, res){
 
   if(req.body.user == null){
-   
+   console.log("User is null");
     return false;
   }
   if(req.body.user.type != "customer"){
-   
+    console.log("User is not a customer");
        return false;
   }
   
@@ -123,6 +137,7 @@ export function userDisable(req, res){
           return;
         }
 }
+
 
 export function userEnable(req, res){
   if(isAdminValid(req)){
@@ -184,4 +199,40 @@ export function getOnlyCustomers(req, res){
     console.log("You have no access to manage users.");
   }
    
+}
+
+export function sendOtpEmail(email, otp){
+  
+  console.log(`Email is ${email} and OTP is ${otp} `);
+
+  const transport = nodemailer.createTransport(
+    {
+       service: 'gmail',
+       host: "smtp.gmail.com",
+       port: 587,
+       secure: false,
+       auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAILKEY,
+       },
+    }
+  );
+
+    const message = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Validate OTP",
+      text: "Your OTP code is " + otp,
+    }
+    
+    transport.sendMail(message, (err, info)=>{
+      if(err){
+        console.log(err);
+      
+      }
+      else{
+        console.log(info);
+      }
+    });
+
 }

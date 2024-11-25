@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 import roomRouter from './routes/roomRoute.js';
 import bookingRouter from './routes/bookingRoute.js';
 import cors from 'cors';
+import feedbackRouter from './routes/feedbackRoute.js';
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.use("/api/gallery", galleryItemRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/room", roomRouter);
 app.use("/api/booking", bookingRouter);
+app.use("/api/add-feedback", feedbackRouter);
 
 app.listen(portNumber, (req, res) => {
     console.log(`App listening on port ${portNumber}!`);
