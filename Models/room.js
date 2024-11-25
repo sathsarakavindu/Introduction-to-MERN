@@ -6,10 +6,10 @@ const RoomModel = mongoose.Schema({
     required: true,
     unique: true
    },
-   // room_name:{
-   //  type: String,
-   //  required: true
-   // },
+   room_name:{
+    type: String,
+    required: true
+   },
    room_category:{
     type: String,
     required: true

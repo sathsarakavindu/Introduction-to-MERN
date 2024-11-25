@@ -196,3 +196,29 @@ export function updateRoom(req, res){
   });
   
 }
+
+export function viewOnlyRoomIdUsingCategory(req, res) {
+  const category = req.params.category; // Retrieve the category from request parameters
+
+  Room.find({ room_category: category }, { room_id: 1, _id: 0 }) // Find rooms by category and project only room_id
+      .then((roomIdValues) => {
+          if (roomIdValues && roomIdValues.length > 0) {
+              const roomNumbers = roomIdValues.map((room) => room.room_id); // Extract room_id values
+              console.log("Room IDs:", roomNumbers.length); // Print to the console
+
+              res.status(200).json({
+                  Room_numbers: roomNumbers,
+              });
+          } else {
+              res.status(404).json({
+                  message: "No rooms found for the specified category",
+              });
+          }
+      })
+      .catch((error) => {
+          console.error("Error fetching room IDs:", error);
+          res.status(500).json({
+              message: "An error occurred while fetching room IDs.",
+          });
+      });
+}

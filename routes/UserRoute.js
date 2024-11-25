@@ -6,6 +6,7 @@ const userRouter = express.Router();
 
 userRouter.post("/", postUsers);
 userRouter.post("/login", loginUser);
+// userRouter.post("/email", sendOtpEmail);
 userRouter.put("/accountdisable", userDisable);
 userRouter.put("/accountenable", userEnable);
 userRouter.get("/", getUser);
