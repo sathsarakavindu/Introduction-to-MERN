@@ -19,8 +19,10 @@ export function createBooking(req, res){
     const newBooking = new Booking({
          bookingId: newId,
          roomId: req.body.roomId,
-         email: req.body.user.email,
+         category: req.body.category,
+         email: req.body.email,
          start: req.body.start,
+         status: req.body.status,
          end: req.body.end
     })
     newBooking.save().then((result)=>{
@@ -38,6 +40,22 @@ export function createBooking(req, res){
 
   });
 }
+
+
+// export function getAllBookings(req, res){
+//     if(!isAdminValid(req)){
+//       res.status(404).json({message: "You can't view bookings."})
+//     }
+//     else{
+//       Booking.find().then((result)=>{
+//         res.status(200).json({messsage: "Successfully fetched bookings.", result: result});
+//       }).catch((err)=>{
+//         res.status(500).json({msg: "Can't be fetched booking", error: err});
+//       })
+//     }
+// }
+
+
 
 export function viewBooking(req, res){
 
@@ -153,7 +171,7 @@ export function cancelBooking(req, res){
 
 }
 
-export default function getAllBookings(req, res){
+export function getAllBookings(req, res){
   Booking.find().then((result)=>{
      res.json(
       {
@@ -265,4 +283,22 @@ export function createBookingUsingCategory(req, res){
           }
       })
    })
+}
+
+export function fetchBookingInfoFromEmail(req, res){
+ 
+
+     if(isCustomerValid(req)){
+         Booking.find({email: req.params.mail}).then((result)=>{
+              console.log(result);
+              res.status(200).json({result: result});
+         }).catch((err)=>{
+          
+             console.log( "Error for fetching " + err);
+        });
+     }
+     else{
+      console.log("Please login...");
+     }
+     
 }
