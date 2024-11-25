@@ -222,13 +222,12 @@ export function sendOtpEmail(email, otp){
       from: process.env.EMAIL,
       to: email,
       subject: "Validate OTP",
-      text: "Your OTP code is " + otp,
+      text: "Your OTP code is " + otp
     }
     
     transport.sendMail(message, (err, info)=>{
       if(err){
         console.log(err);
-      
       }
       else{
         console.log(info);
