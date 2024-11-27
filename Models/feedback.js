@@ -1,29 +1,33 @@
 import mongoose from "mongoose";
 
 const feedbacks = mongoose.Schema({
+    Feedback_id:{
+        type: Number,
+        required: true
+    },
     User_id:{
         type: String,
-        require: true
+        required: true
     },
     User_name: {
         type: String,
-        require: true
+        required: true
     },
     Room_id: {
         type: Number,
-        require: true
+        required: true
     },
     Room_name: {
         type: String,
-        require: true
+        required: true
     },
     Feedback: {
         type: String,
-        require: true
+        required: true
     },
     Approvel: {
         type: Boolean,
-        require: true,
+        required: true,
         default: false
     }
 })

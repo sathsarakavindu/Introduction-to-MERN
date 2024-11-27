@@ -215,15 +215,19 @@ export function getOnlyCustomers(req, res) {
     User.find({ type: 'customer' })
       .skip((pageNum - 1) * pageLimit) // Skip documents for previous pages
       .limit(pageLimit) // Limit the number of documents per page
-      .then((result) => {
-        res.status(200).json({
-          message: "Found users",
-          result: result,
-          pagination: {
-            currentPage: pageNum,
-            pageSize: pageLimit,
-          },
-        });
+      .then((users) => {
+          User.countDocuments().then((totalCount)=>{
+            res.json({
+              message: "User found",
+              users: users,
+              pagination:{
+                currentPage: page,
+                pageSize: pageSize,
+                totalUsers: totalCount,
+                totalPages: Math.ceil(totalCount / pageSize),
+              },
+            });
+          });
       })
       .catch((err) => {
         console.log(err);

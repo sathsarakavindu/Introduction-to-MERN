@@ -15,7 +15,7 @@ export function AddFeedback(req, res){
         const addFeedbacks = new FeedbackData(feedbackData);
         addFeedbacks.save().then((result)=>{
             res.status(200).json({
-                message: "Feddback added", 
+                message: "Feedback added", 
                 data: result
            })
         }).catch((err)=>{
@@ -53,11 +53,14 @@ export function getAllFeedback(req, res){
 
 }
 
+
+
 export function ApproveFeedback(req, res){
 
          if(isAdminValid(req)){
-            const feedbackId = req.body._id;
-            FeedbackData.findOneAndUpdate({_id: feedbackId}, {Approvel: true}).
+            const feedbackId = req.body.Feedback_id;
+            console.log("Feed ID now "+feedbackId);
+            FeedbackData.findOneAndUpdate({Feedback_id: req.body.Feedback_id}, {Approvel: true}).
             then((result)=>{
               console.log(result);
               res.status(200).json({
@@ -79,8 +82,9 @@ export function DisapproveFeedback(req, res){
 
   if(isAdminValid(req)){
 
-     const feedbackId = req.body._id;
-     FeedbackData.findOneAndUpdate({_id: feedbackId}, {Approvel: false}).
+     const feedbackId = req.body.Feedback_id;
+     console.log("Feed ID now in disable"+feedbackId);
+     FeedbackData.findOneAndUpdate({Feedback_id: req.body.Feedback_id}, {Approvel: false}).
      then((result)=>{
        console.log(result);
        res.status(200).json({
