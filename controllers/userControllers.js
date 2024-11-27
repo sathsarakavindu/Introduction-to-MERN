@@ -27,16 +27,16 @@ export function postUsers(req, res){
           otp: otp
          });
 
-         newOtp.save().then(async ()=>{
-         await sendOtpEmail(user.email, otp);
+         newOtp.save().then( ()=>{
+          sendOtpEmail(user.email, otp);
              res.json({
               message: "User created successfully"
             });
          })
 
-        res.json({
-          message: "User created successfully!"
-        })
+        // res.json({
+        //   message: "User created successfully!"
+        // })
     }).catch((error)=>{
       console.log(error)
        res.json({message:"User creation failed."});
@@ -183,23 +183,65 @@ export function isAccountDisable(user){
         }
 }
 
-export function getOnlyCustomers(req, res){
-  if(isAdminValid(req)){
-    console.log("Admin");
-    User.find({type: 'customer'}).
-    then((result)=>{
-      res.status(200).json({
-        message: "Found users", 
-        result: result
-      });
-    })
-    .catch((err)=>{console.log(err)});
-  }
-  else{
-    console.log("You have no access to manage users.");
-  }
+// export function getOnlyCustomers(req, res){
+//   if(isAdminValid(req)){
+//     console.log("Admin");
+//     User.find({type: 'customer'}).
+//     then((result)=>{
+//       res.status(200).json({
+//         message: "Found users", 
+//         result: result
+//       });
+//     })
+//     .catch((err)=>{console.log(err)});
+//   }
+//   else{
+//     console.log("You have no access to manage users.");
+//   }
    
+// }
+
+export function getOnlyCustomers(req, res) {
+  if (isAdminValid(req)) {
+    console.log("Admin");
+
+    // Extract page number and page size from query parameters
+    const { page = 1, pageSize = 10 } = req.body;
+
+    // Convert to integers (defaults: page 1, pageSize 10)
+    const pageNum = parseInt(page, 10);
+    const pageLimit = parseInt(pageSize, 10);
+
+    User.find({ type: 'customer' })
+      .skip((pageNum - 1) * pageLimit) // Skip documents for previous pages
+      .limit(pageLimit) // Limit the number of documents per page
+      .then((result) => {
+        res.status(200).json({
+          message: "Found users",
+          result: result,
+          pagination: {
+            currentPage: pageNum,
+            pageSize: pageLimit,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({
+          message: "Error retrieving users",
+          error: err,
+        });
+      });
+  } else {
+    res.status(403).json({
+      message: "You have no access to manage users.",
+    });
+  }
 }
+
+
+
+
 
 export function sendOtpEmail(email, otp){
   
@@ -233,5 +275,31 @@ export function sendOtpEmail(email, otp){
         console.log(info);
       }
     });
+
+}
+
+export function verifyUserEmail(req, res){
+
+  const otp = req.body.otp;
+  const email = req.body.email;
+
+  Otp.find({email: email}).sort({date: -1}).then((otpList)=>{
+    if(otpList.length == 0){
+      res.json({message: "OTP is invalid"});
+
+    }
+    else{
+      const latestOTP = otpList[0];
+      if(latestOTP.otp == otp){
+        User.findOneAndUpdate({email: email}, {emailVerified: true}).then(()=>{
+          res.json({messsage: " User email verified successfully."});
+        })
+         
+      }
+      else{
+        res.json({message: "OTP is invalid."});
+      }
+    }
+  })
 
 }
