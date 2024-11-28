@@ -110,10 +110,10 @@ export function viewBooking(req, res){
 
 export function approveBookingStatus(req, res){
   if(isAdminValid(req)){
-     const bookingID = req.params.book_id;
-     console.log(bookingID);
+     const bookingID = req.body.bookingId;
+     console.log(`Book id is ${req.body.bookingId}`);
      if(bookingID != null){
-      Booking.findOneAndUpdate({bookingId: bookingID}, {status:req.body.status}).then((result)=>{
+      Booking.findOneAndUpdate({bookingId: req.body.bookingId}, {status: "Approved"}).then((result)=>{
         if(result != null){
           res.status(201).json({
             message: "Booking approved successfully", 
@@ -145,8 +145,8 @@ export function approveBookingStatus(req, res){
 export function cancelBooking(req, res){
 
    if(isAdminValid(req)){
-    const bookID = req.params.book_id;
-    Booking.findOneAndUpdate({bookingId: bookID}, {status: req.body.status}).then((result)=>{
+  
+    Booking.findOneAndUpdate({bookingId: req.body.bookingId}, {status: true}).then((result)=>{
       if(result != null){
         res.status(200).json({
           message: "Successfully updated.",

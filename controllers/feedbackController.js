@@ -76,6 +76,7 @@ export function ApproveFeedback(req, res){
               });
             });
          }
+
 }
 
 export function DisapproveFeedback(req, res){
@@ -100,4 +101,28 @@ export function DisapproveFeedback(req, res){
        });
      });
   }
+}
+
+export function getApproveFeedback(req, res){
+  FeedbackData.find({Approvel: true}).
+  then((results)=>{
+    res.status(200).json({
+      message: "All approved feedbacks.", 
+      results: results
+    });
+  }).
+  catch((err)=>{
+    res.status(500).json(
+    {   msg: "Can't be fetched approved feedbacks", 
+        error: err
+    }
+    );
+  });
+}
+
+export function getNumberOfFeedbacks(req, res){
+  FeedbackData.countDocuments().then((count)=>{
+    res.status(200).json({count: count});
+    console.log(count);
+  })
 }

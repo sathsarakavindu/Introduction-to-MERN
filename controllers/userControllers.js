@@ -7,6 +7,7 @@ import nodemailer from 'nodemailer';
 import Otp from "../Models/otp.js";
 
 
+
 dotenv.config();
 
 export function postUsers(req, res){
@@ -307,3 +308,4 @@ export function verifyUserEmail(req, res){
   })
 
 }
+
